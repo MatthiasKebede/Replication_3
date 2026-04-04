@@ -1,0 +1,74 @@
+project,class_name,test_name,flaky,full_code,preprocessed_code,NoOfTokens for orignal code,tokens of reduced code,final_code,Remarks
+achilles,ArgumentExtractorTest,should_init_entity_packages,0,"@Test public void should_init_entity_packages() throws Exception {
+  configMap.put(ENTITY_PACKAGES,""info.archinnov.achilles.test.sample.entity,info.archinnov.achilles.test.more.entity"");
+  Collection<Class<?>> actual=extractor.initEntities(configMap,this.getClass().getClassLoader());
+  assertThat(actual).containsOnly(Entity1.class,Entity2.class,Entity3.class);
+}
+","@Test public void should_init_entity_packages() throws Exception {
+assertThat(actual).containsOnly(Entity1.class,Entity2.class,Entity3.class);
+}",116,43,"@Test public void should_init_entity_packages() throws Exception {
+  configMap.put(ENTITY_PACKAGES,""info.archinnov.achilles.test.sample.entity,info.archinnov.achilles.test.more.entity"");
+  Collection<Class<?>> actual=extractor.initEntities(configMap,this.getClass().getClassLoader());
+  assertThat(actual).containsOnly(Entity1.class,Entity2.class,Entity3.class);
+}
+","This test uses configmap. now if the testsuite is run asynchrounusly, the same configmap can already be accupied which can result in race conditons. other than that the trest does not have any flaky characteristics"
+assertj-core,DoubleArrays_assertEndsWith_Test,should_fail_if_actual_ends_with_first_elements_of_sequence_only_according_to_custom_comparison_strategy,0,"@Test public void should_fail_if_actual_ends_with_first_elements_of_sequence_only_according_to_custom_comparison_strategy(){
+  AssertionInfo info=someInfo();
+  double[] sequence={6d,20d,22d};
+  try {
+    arraysWithCustomComparisonStrategy.assertEndsWith(info,actual,sequence);
+  }
+ catch (  AssertionError e) {
+    verify(failures).failure(info,shouldEndWith(actual,sequence,absValueComparisonStrategy));
+    return;
+  }
+  failBecauseExpectedAssertionErrorWasNotThrown();
+}
+","@Test public void should_fail_if_actual_ends_with_first_elements_of_sequence_only_according_to_custom_comparison_strategy(){
+}",163,42,"@Test public void should_fail_if_actual_ends_with_first_elements_of_sequence_only_according_to_custom_comparison_strategy(){
+  AssertionInfo info=someInfo();
+  double[] sequence={6d,20d,22d};
+  try {
+    arraysWithCustomComparisonStrategy.assertEndsWith(info,actual,sequence);
+  }
+ catch (  AssertionError e) {
+    verify(failures).failure(info,shouldEndWith(actual,sequence,absValueComparisonStrategy));
+    return;
+  }
+  failBecauseExpectedAssertionErrorWasNotThrown();
+}
+",I agree with lable here. This is classic deterministice unit test. with a try catch logic to to catch exceptions. it doesn't dpend on on external resources either
+okhttp,SpdyConnectionTest,peerHttp2ServerZerosCompressionTable,1,"@Test public void peerHttp2ServerZerosCompressionTable() throws Exception {
+  boolean client=false;
+  Settings settings=new Settings();
+  settings.set(Settings.HEADER_TABLE_SIZE,PERSIST_VALUE,0);
+  SpdyConnection connection=sendHttp2SettingsAndCheckForAck(client,settings);
+synchronized (connection) {
+    assertEquals(0,connection.peerSettings.getHeaderTableSize());
+    Http20Draft09.Reader frameReader=(Http20Draft09.Reader)connection.frameReader;
+    assertEquals(0,frameReader.hpackReader.maxHeaderTableByteCount());
+  }
+}
+","@Test public void peerHttp2ServerZerosCompressionTable() throws Exception {
+assertEquals(0,connection.peerSettings.getHeaderTableSize());
+}",159,37,"@Test public void peerHttp2ServerZerosCompressionTable() throws Exception {
+  boolean client=false;
+  Settings settings=new Settings();
+  settings.set(Settings.HEADER_TABLE_SIZE,PERSIST_VALUE,0);
+  SpdyConnection connection=sendHttp2SettingsAndCheckForAck(client,settings);
+synchronized (connection) {
+    assertEquals(0,connection.peerSettings.getHeaderTableSize());
+    Http20Draft09.Reader frameReader=(Http20Draft09.Reader)connection.frameReader;
+    assertEquals(0,frameReader.hpackReader.maxHeaderTableByteCount());
+  }
+}
+","This is falky test beacuse ti sends  a connection request and doesn't wait for tit reply before assertion. so if the reposnse is delayed, the test will fail. the falkinesss is intoduced by the network. The test is dependent on external reosuce"
+wildfly,NamingSubsystemTestCase,testRejectionsEAP7,1,"@Test public void testRejectionsEAP7() throws Exception {
+  testTransformer(""subsystem.xml"",ModelTestControllerVersion.EAP_7_0_0,ModelVersion.create(2,0),""wildfly-naming"");
+}
+","@Test public void testRejectionsEAP7() throws Exception {
+}",58,17,"@Test public void testRejectionsEAP7() throws Exception {
+  testTransformer(""subsystem.xml"",ModelTestControllerVersion.EAP_7_0_0,ModelVersion.create(2,0),""wildfly-naming"");
+}
+","this containts a test smell i.e. indidrect testing as the the test belongs to NamingSubsystemTestCase, but it invokes an othertest class whihc is testtransformer. this test enitrely dpends on that class, it doenst have any assertions of its own
+, "
